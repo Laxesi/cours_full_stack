@@ -9,11 +9,8 @@ Dépôt de travail du cours. Il regroupe les TP du cours magistral et les TD à 
       front/    répertoire vide, destiné au projet créé par « ng new » : TP Angular
     td/
       back/     TD : API REST de la bibliothèque de films
-        http/   requêtes HTTP, exécutées avec l'extension VSCode REST Client
+        http/   requêtes HTTP, exécutées avec l'extension IntelliJ IDEA’s Built-In REST Client
       front/    TD : front Angular de la bibliothèque de films
-
-L'ouverture du dossier racine dans VSCode déclenche la proposition des extensions
-recommandées.
 
 ## Récupération du dépôt
 
@@ -35,7 +32,7 @@ cd tp/back
 ./gradlew bootRun
 ```
 
-Le wrapper télécharge Gradle 9.7.1 et, le cas échéant, le JDK 26 : aucune installation
+Le wrapper télécharge Gradle 9.7.1 et, le cas échéant, le JDK 21 : aucune installation
 manuelle n'est nécessaire. Le fichier `build.gradle` ne déclare qu'une dépendance,
 `spring-boot-starter-webmvc`. Elle apporte Spring MVC, Jackson, un Tomcat embarqué ainsi
 que `spring-context`, le conteneur IoC utilisé dans les premiers TP.
@@ -49,17 +46,16 @@ ng new tp-front      # CSS, sans SSR, « None » pour les outils IA
 
 ### TD
 
-Le back est généré depuis [start.spring.io](https://start.spring.io) ou depuis l'IDE,
-**dans `td/back`**, avec la dépendance Spring Web. Le front est généré avec `ng new`,
+Le back est généré depuis l'IDE IntelliJ,
+**dans `td/back`**, avec la dépendance Spring Web. Le front est généré avec IntelliJ, utilisant `ng new`,
 **dans `td/front`**.
 
 ## Requêtes HTTP
 
 Ni collection Postman ni collection Bruno : les requêtes sont versionnées dans des fichiers
-`.http` placés dans `td/back/http` et exécutées par l'extension VSCode
-[REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client),
-via l'action *Send Request* affichée au-dessus de chaque requête. Un fichier par ressource,
-requêtes séparées par `###`. `films.http` contient le squelette du TD 1.
+`.http` placés dans `td/back/http` et exécutées par IntelliJ IDEA’s Built-In REST Client,
+via l'action *Send Request* afficher a côté de chaque requête. Un fichier par ressource,
+requêtes séparées par `###`. `films.http` contient le squelette du TD 1 et une partie du TD 2, `acteur.http` contient l'autre partie du squelette du TD 2
 
 ## Rendus
 

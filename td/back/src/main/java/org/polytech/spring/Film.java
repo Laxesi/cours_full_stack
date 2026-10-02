@@ -1,21 +1,28 @@
 package org.polytech.spring;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
+@Entity
 public class Film {
 
+    @Id
+    @GeneratedValue
     private Long id;
 
-    @NotBlank(message = "Le titre est obligatoire")
+    @Column(nullable=false, length=200)
     private String titre;
 
-    @NotBlank(message = "Le réalisateur est obligatoire")
+    @Column(nullable=false, length=200)
     private String realisateur;
 
-    @NotNull(message = "La date de sortie est obligatoire")
+    @Column(nullable=false)
     private LocalDate dateSortie;
 
     public enum Genre {
@@ -29,8 +36,16 @@ public class Film {
         SCIENCE_FICTION
     }
 
-    @NotNull(message = "Le genre est obligatoire")
+    @Column(nullable=false)
     private Genre genre;
+
+    @ManyToMany
+    @JoinTable(
+            name = "film_acteur",
+            joinColumns = @JoinColumn(name = "film_id"),
+            inverseJoinColumns = @JoinColumn(name = "acteur_id")
+    )
+    private Set<Acteur> acteurs = new HashSet<>();
 
     public Film(){}
 
@@ -87,5 +102,23 @@ public class Film {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public Set<Acteur> getActeurs() {
+        return acteurs;
+    }
+
+    public void setActeurs(Set<Acteur> acteurs) {
+        this.acteurs = acteurs;
+    }
+
+    public void ajouterActeur(Acteur acteur){
+        this.acteurs.add(acteur);
+        acteur.getFilms().add(this);
+    }
+
+    public void supprimerActeur(Acteur acteur){
+        this.acteurs.remove(acteur);
+        acteur.getFilms().remove(this);
     }
 }

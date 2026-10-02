@@ -1,5 +1,6 @@
 package org.polytech.spring;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,40 +11,64 @@ import java.util.List;
 public class FilmsService {
 
     private final FilmsRepository filmsRepository;
+    private final ActeurRepository acteurRepository;
 
-    public FilmsService(FilmsRepository filmsRepository){
+    public FilmsService(FilmsRepository filmsRepository, ActeurRepository acteurRepository){
         this.filmsRepository = filmsRepository;
+        this.acteurRepository = acteurRepository;
     }
 
-    public FilmsService(){
-        filmsRepository = new FilmsRepository();
+    public List<FilmDto> getAll(){
+        return filmsRepository.findAll().stream().map(film -> FilmMapper.toDto(film)).toList();
     }
 
-    public List<Film> getAll(){
-        return filmsRepository.getAll();
+    @Transactional(readOnly = true)
+    public FilmDetailDto  get(Long id){
+        Film film = filmsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé"));
+        return FilmMapper.toDetailDto(film);
     }
 
-    public Film get(Long id){
-        Film film = filmsRepository.get(id);
-        if (film == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvée");
-        }
-        return film;
+    public FilmDto put(FilmCreationDto filmDto){
+        Film film = filmsRepository.save(FilmMapper.toEntity(filmDto));
+        return FilmMapper.toDto(film);
     }
 
-    public void put(Film film){
-        filmsRepository.put(film);
+    @Transactional
+    public FilmDto update(Long id, FilmCreationDto filmCreationDto) {
+        Film film = filmsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé"));
+        film.setTitre(filmCreationDto.titre());
+        film.setRealisateur(filmCreationDto.realisateur());
+        film.setDateSortie(filmCreationDto.dateSortie());
+        film.setGenre(filmCreationDto.genre());
+        return FilmMapper.toDto(filmsRepository.save(film));
     }
 
-    public Film update(Long id, Film film) {
-        get(id);
-        film.setId(id);
-        filmsRepository.replace(film);
-        return film;
-    }
-
+    @Transactional
     public void delete(Long id) {
-        get(id);
-        filmsRepository.remove(id);
+        if (!filmsRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé");
+        }
+        filmsRepository.deleteById(id);
+    }
+
+    public List<ActeurDto> getActeurs(Long id) {
+        if (!filmsRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé");
+        }
+        return acteurRepository.findByFilmsId(id).stream().map(acteur -> ActeurMapper.toDto(acteur)).toList();
+    }
+
+    @Transactional
+    public void associer(Long id, Long acteurId) {
+        Film film = filmsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé"));
+        Acteur acteur = acteurRepository.findById(acteurId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Acteur non trouvé"));
+        film.ajouterActeur(acteur);
+    }
+
+    @Transactional
+    public void dissocier(Long id, Long acteurId) {
+        Film film = filmsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Film non trouvé"));
+        Acteur acteur = acteurRepository.findById(acteurId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Acteur non trouvé"));
+        film.supprimerActeur(acteur);
     }
 }

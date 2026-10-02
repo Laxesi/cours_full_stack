@@ -1,10 +1,6 @@
-### Liste des films
-GET http://localhost:8080/films
-Accept: application/json
-
-### Film identifié par son identifiant
-GET http://localhost:8080/films/1
-Accept: application/json
+########################################
+# CRUD Films
+########################################
 
 ### Création — réponse attendue : 201 Created avec en-tête Location
 POST http://localhost:8080/films
@@ -17,6 +13,16 @@ Content-Type: application/json
   "genre": "SCIENCE_FICTION"
 }
 
+> {% client.global.set("filmId", response.body.id); %}
+
+### Liste des films — réponse attendue : 200 (sans les acteurs)
+GET http://localhost:8080/films
+Accept: application/json
+
+### Détail du film — réponse attendue : 200 avec "acteurs": []
+GET http://localhost:8080/films/{{filmId}}
+Accept: application/json
+
 ### Création invalide — réponse attendue : 400 au format ProblemDetail
 POST http://localhost:8080/films
 Content-Type: application/json
@@ -25,19 +31,73 @@ Content-Type: application/json
   "realisateur": "Sans titre"
 }
 
-### Mise à jour
-PUT http://localhost:8080/films/1
+### Mise à jour — réponse attendue : 200 avec le film modifié
+PUT http://localhost:8080/films/{{filmId}}
 Content-Type: application/json
 
 {
-  "titre": "Blade Runner",
+  "titre": "Blade Runner (Final Cut)",
   "realisateur": "Ridley Scott",
   "dateSortie": "1982-06-25",
   "genre": "SCIENCE_FICTION"
 }
 
+### Mise à jour d'un film inconnu — réponse attendue : 404 ProblemDetail
+PUT http://localhost:8080/films/9999
+Content-Type: application/json
+
+{
+  "titre": "Fantôme",
+  "realisateur": "Personne",
+  "dateSortie": "2000-01-01",
+  "genre": "SCIENCE_FICTION"
+}
+
+########################################
+# Association film <-> acteur
+########################################
+
+#Avant de passer a la suite renseignée l'id de l'acteur qui vas servire pour le teste
+> {% client.global.set("filmId", 53); %}
+
+### Association — réponse attendue : 204 No Content
+POST http://localhost:8080/films/{{filmId}}/acteurs/{{acteurId}}
+
+### Détail du film — réponse attendue : 200 avec un acteur dans "acteurs"
+GET http://localhost:8080/films/{{filmId}}
+Accept: application/json
+
+### Acteurs du film — réponse attendue : 200 avec acteur
+GET http://localhost:8080/films/{{filmId}}/acteurs
+Accept: application/json
+
+### Association avec un acteur inconnu — réponse attendue : 404 ProblemDetail
+POST http://localhost:8080/films/{{filmId}}/acteurs/9999
+
+### Acteurs d'un film inconnu — réponse attendue : 404 ProblemDetail
+GET http://localhost:8080/films/9999/acteurs
+Accept: application/json
+
+### Dissociation — réponse attendue : 204 No Content
+DELETE http://localhost:8080/films/{{filmId}}/acteurs/{{acteurId}}
+
+### Acteurs du film après dissociation — réponse attendue : 200 avec []
+GET http://localhost:8080/films/{{filmId}}/acteurs
+Accept: application/json
+
+########################################
+# Suppression Films
+########################################
+
 ### Suppression — réponse attendue : 204 No Content
-DELETE http://localhost:8080/films/1
+DELETE http://localhost:8080/films/{{filmId}}
+
+### Film supprimé — réponse attendue : 404 ProblemDetail
+GET http://localhost:8080/films/{{filmId}}
+Accept: application/json
+
+### Suppression d'un film inconnu — réponse attendue : 404 ProblemDetail
+DELETE http://localhost:8080/films/9999
 
 ### Identifiant inconnu — réponse attendue : 404 au format ProblemDetail
 GET http://localhost:8080/films/9999

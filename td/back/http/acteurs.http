@@ -1,0 +1,69 @@
+########################################
+# CRUD Acteur
+########################################
+
+### Création d'un acteur pour les tests — réponse attendue : 201
+POST http://localhost:8080/acteurs
+Content-Type: application/json
+
+{
+  "nom": "Ford",
+  "prenom": "Harrison",
+  "dateNaissance": "2042-07-13"
+}
+
+> {% client.global.set("acteurId", response.body.id); %}
+
+### Liste des acteurs — réponse attendue : 200 (sans les acteurs)
+GET http://localhost:8080/acteurs
+Accept: application/json
+
+### Détail de l'acteur — réponse attendue : 200
+GET http://localhost:8080/acteurs/{{acteurId}}
+Accept: application/json
+
+### Création invalide — réponse attendue : 400 au format ProblemDetail
+POST http://localhost:8080/acteurs
+Content-Type: application/json
+
+{
+  "nom": "Sans titre"
+}
+
+### Mise à jour — réponse attendue : 200 avec le film modifié
+PUT http://localhost:8080/acteurs/{{acteurId}}
+Content-Type: application/json
+
+{
+  "nom": "Ford",
+  "prenom": "Harrison",
+  "dateNaissance": "1942-07-13"
+}
+
+### Mise à jour d'acteur inconnu — réponse attendue : 404 ProblemDetail
+PUT http://localhost:8080/acteurs/9999
+Content-Type: application/json
+
+{
+  "nom": "Ford",
+  "prenom": "Harrison",
+  "dateNaissance": "1942-07-13"
+}
+
+########################################
+# Suppression Acteurs
+########################################
+
+### Suppression — réponse attendue : 204 No Content
+DELETE http://localhost:8080/acteurs/{{acteurId}}
+
+### Acteur supprimé — réponse attendue : 404 ProblemDetail
+GET http://localhost:8080/acteurs/{{acteurId}}
+Accept: application/json
+
+### Suppression d'un acteur inconnu — réponse attendue : 404 ProblemDetail
+DELETE http://localhost:8080/acteurs/9999
+
+### Identifiant inconnu — réponse attendue : 404 au format ProblemDetail
+GET http://localhost:8080/acteurs/9999
+Accept: application/json

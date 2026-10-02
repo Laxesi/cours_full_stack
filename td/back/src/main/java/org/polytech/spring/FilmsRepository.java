@@ -1,5 +1,8 @@
 package org.polytech.spring;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -7,36 +10,10 @@ import java.util.List;
 import java.util.TreeMap;
 
 @Repository
-public class FilmsRepository {
+public interface FilmsRepository extends JpaRepository<Film, Long> {
 
-    private final TreeMap<Long, Film> films;
+    List<Film> findByActeursId(Long acteursId);
 
-    public FilmsRepository(){
-        films = new TreeMap<>();
-    }
-
-    public List<Film> getAll(){
-        return new ArrayList<>(films.values());
-    }
-
-    public Film get(Long id){
-        return films.get(id);
-    }
-
-    public void put(Film film){
-        long newId = 1;
-        if (!films.isEmpty()) {
-            newId = films.lastEntry().getKey() + 1;
-        }
-        film.setId(newId);
-        films.put(newId, film);
-    }
-
-    public void remove(Long id){
-        films.remove(id);
-    }
-
-    public void replace(Film film){
-        films.put(film.getId(), film);
-    }
+    @Query("SELECT f FROM Film f JOIN f.acteurs a WHERE a.id = :acteurId")
+    List<Film> findFilmsByActeur(@Param("acteurId") Long acteurId);
 }
