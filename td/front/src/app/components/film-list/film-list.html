@@ -1,1 +1,6 @@
-<p>film-list works!</p>
+<h1>La liste des films</h1>
+@if (films$ | async; as films){
+  <app-film-make-list [films]="films"/>
+} @else {
+  <h1>Une erreur c'est produite</h1>
+}

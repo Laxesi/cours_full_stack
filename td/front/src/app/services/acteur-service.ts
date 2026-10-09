@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 @Service()
 export class ActeurService {
   private http = inject(HttpClient);
-  private url = '/api/acteur';
+  private url = '/api/acteurs';
 
   getAll(): Observable<Acteur[]>{
     return this.http.get<Acteur[]>(this.url);

@@ -1,0 +1,10 @@
+:host {
+  flex: 1;
+  text-align: center;
+  border-style: solid;
+  padding: 5px;
+  margin: 5px;
+}
+:host:hover {
+  background-color: #c2c2c2;
+}

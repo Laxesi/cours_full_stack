@@ -1,1 +1,8 @@
-<p>acteur-detail works!</p>
+@if (acteur$ | async; as acteur){
+  <h1>{{acteur.nom}} {{acteur.prenom}}</h1>
+  <a>date de naissance : {{acteur.dateNaissance}}</a><br>
+  <a>Film : </a><br>
+  <app-film-make-list [films]="acteur.films"/>
+} @else {
+  <h1>Une erreur est survenue</h1>
+}

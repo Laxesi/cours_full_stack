@@ -1,1 +1,6 @@
-<p>acteur-list works!</p>
+<h1>La liste des Acteurs</h1>
+@if (acteurs$ | async; as acteurs){
+  <app-acteur-make-list [acteurs]="acteurs"/>
+} @else {
+  <h1>Une erreur c'est produite</h1>
+}
