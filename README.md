@@ -67,3 +67,18 @@ requêtes séparées par `###`. `films.http` contient le squelette du TD 1 et un
 
 La régularité et la lisibilité des commits ainsi que la mise à jour du `README.md` sont
 prises en compte dans l'évaluation.
+
+# Cas particulier : pourquoi je ne l'ai pas (encore) finie
+## Trouble spécifique du langage ecrit
+
+Il nous est demandé de réaliser le TD sans utiliser l'IA, c'est donc ce que j'ai fait en utilisant les diapositives de leçon et éventuellement quelques ressources sur internet. Cependant, avec mon trouble spécifique du langage ecrit (ex dyslexie et dysorthographie), lire le cours et les pages web, mais plus particulièrement chercher une info me prend beaucoup plus de temps.
+
+Ce trouble a été diagnostiqué par une orthophoniste et d'ailleurs je dispose actuellement d'aménagements tels que les tiers-temps durant les DS.
+
+## Quelques autres points qui m'ont ralenti ou qui m'ont posé problème
+
+- J'ai mal anticipé l'utilisation de mes composants réutilisables acteur-make-list et film-make-list en demandant comme input pour le /film et /acteur un ```Observable<Acteur[]>``` au lieu de juste ```Acteur[]```, j'ai donc dû réécrire ces composants ainsi que ceux précédant pour pouvoir le réutiliser avec acteur-detail et film-detail.
+
+- J'ai oublié de créer un ActeurDetailDto pour envoyer les films avec les acteurs.
+
+- Je n'ai pas su trouver facilement le moyen d'utiliser l'ID transmis dans la barre d'adresse pour l'envoyer au service afin qu'il fasse la requête API.
