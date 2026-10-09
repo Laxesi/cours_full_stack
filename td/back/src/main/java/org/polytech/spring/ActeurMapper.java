@@ -17,4 +17,14 @@ public final class ActeurMapper {
                 acteurCreationDto.dateNaissance()
         );
     }
+
+    public static ActeurDetailDto toDetailDto(Acteur acteur) {
+        return new ActeurDetailDto(
+                acteur.getId(),
+                acteur.getNom(),
+                acteur.getPrenom(),
+                acteur.getDateNaissance(),
+                acteur.getFilms().stream().map(film -> FilmMapper.toDto(film)).toList()
+        );
+    }
 }

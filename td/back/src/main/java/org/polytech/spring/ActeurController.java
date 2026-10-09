@@ -25,7 +25,7 @@ public class ActeurController {
     }
 
     @GetMapping("/{id}")
-    public ActeurDto get(@PathVariable Long id) {
+    public ActeurDetailDto get(@PathVariable Long id) {
         return acteurService.get(id);
     }
 

@@ -23,8 +23,8 @@ public class ActeurService {
         return acteurRepository.findAll().stream().map(acteur -> ActeurMapper.toDto(acteur)).toList();
     }
 
-    public ActeurDto get(Long id) {
-        return ActeurMapper.toDto(acteurRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Acteur non trouvé")));
+    public ActeurDetailDto get(Long id) {
+        return ActeurMapper.toDetailDto(acteurRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Acteur non trouvé")));
     }
 
     @Transactional
