@@ -6,7 +6,8 @@ import {FilmMakeList} from '../_reutilisables/film-make-list/film-make-list';
 import {FilmFormulaire} from '../_reutilisables/film-formulaire/film-formulaire';
 import {Film} from '../../models/film';
 import {Acteur} from '../../models/acteur';
-import {merge, Subject} from 'rxjs';
+import {catchError, merge, of, Subject} from 'rxjs';
+import {NotificationService} from '../../services/notification-service';
 
 @Component({
   imports: [
@@ -22,9 +23,20 @@ import {merge, Subject} from 'rxjs';
 export class FilmList {
   ajouter = false;
 
+  private notificationService = inject(NotificationService);
+
   private filmsModifie$ = new Subject<Film[]>();
 
-  filmsInitial$ = inject(FilmService).getAll()
+  filmsInitial$ = inject(FilmService).getAll().pipe(
+    catchError(err => {
+      const problem = err.error;
+      this.notificationService.notifie(
+        problem?.title || "Erreur de chargement",
+        problem?.detail || "Impossible de récupérer la liste des films."
+      );
+      return of([]);
+    })
+  )
 
   films$ = merge(this.filmsInitial$, this.filmsModifie$);
 

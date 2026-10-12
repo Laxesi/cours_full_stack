@@ -5,9 +5,10 @@ import {ActeurFormulaire} from '../acteur-formulaire/acteur-formulaire';
 import {ActeurMakeList} from '../acteur-make-list/acteur-make-list';
 import {AsyncPipe} from '@angular/common';
 import {toObservable} from '@angular/core/rxjs-interop';
-import {combineLatest, map} from 'rxjs';
+import {catchError, combineLatest, map, of} from 'rxjs';
 import {Film} from '../../../models/film';
 import {FilmService} from '../../../services/film-service';
+import {NotificationService} from '../../../services/notification-service';
 
 @Component({
   imports: [
@@ -24,13 +25,25 @@ export class FilmActeurEdit {
   nuewFilm = output<Film>()
   close = output()
 
-  acteurs$ = inject(ActeurService).getAll();
+  private notificaitonService = inject(NotificationService);
+
+  acteurs$ = inject(ActeurService).getAll().pipe(
+    catchError(err => {
+      const problem = err.error;
+      this.notificationService.notifie(
+        problem?.title || "Erreur de chargement",
+        problem?.detail || "Impossible de récupérer les acteurs."
+      );
+      return of([])
+    })
+  );
   filmActeurs$ = toObservable(this.film).pipe(map(f => f?.acteurs ?? []));
 
   recherche = signal<string>('');
   recherche$ = toObservable(this.recherche);
 
   filmService = inject(FilmService);
+  notificationService = inject(NotificationService);
 
   acteursDisponibles$ = combineLatest([this.acteurs$, this.filmActeurs$, this.recherche$]).pipe(map(([acteurs, filmActeur, recherche]) => {
     const ids = filmActeur.map(a => a.id);
@@ -75,7 +88,11 @@ export class FilmActeurEdit {
         this.nuewFilm.emit(nuewFilm);
       },
       error: (err) => {
-        console.error(err)
+        const problem = err.error;
+        this.notificationService.notifie(
+          problem?.title || "Erreur de création",
+          problem?.detail || "Impossible d'ajouter l'acteur'."
+        );
       }
     })
   }
@@ -89,7 +106,11 @@ export class FilmActeurEdit {
         this.nuewFilm.emit(nuewFilm);
       },
       error: (err) => {
-        console.error(err)
+        const problem = err.error;
+        this.notificationService.notifie(
+          problem?.title || "Erreur de suppression",
+          problem?.detail || "Impossible de retirer l'acteur'."
+        );
       }
     })
   }

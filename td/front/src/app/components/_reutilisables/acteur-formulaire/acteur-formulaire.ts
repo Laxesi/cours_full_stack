@@ -1,8 +1,8 @@
 import {Component, inject, input, output} from '@angular/core';
 import {Acteur} from '../../../models/acteur';
-import {FilmService} from '../../../services/film-service';
 import {ActeurService} from '../../../services/acteur-service';
 import {FormsModule} from '@angular/forms';
+import {NotificationService} from '../../../services/notification-service';
 
 @Component({
   imports: [FormsModule],
@@ -14,7 +14,8 @@ export class ActeurFormulaire {
   acteurinput = input<Acteur | undefined>(undefined);
   nuewActeur = output<Acteur>();
 
-  private acteurService = inject(ActeurService)
+  private acteurService = inject(ActeurService);
+  private notificationService = inject(NotificationService);
 
   acteur: Partial<Acteur> = {
     id: 0,
@@ -39,7 +40,11 @@ export class ActeurFormulaire {
           this.nuewActeur.emit(acteurCree);
         },
         error: (err) => {
-          console.error(err)
+          const problem = err.error;
+          this.notificationService.notifie(
+            problem?.title || "Erreur de création",
+            problem?.detail || "Impossible de crée l'acteur."
+          );
         }
       })
     }else {
@@ -53,7 +58,11 @@ export class ActeurFormulaire {
           this.nuewActeur.emit(acteurMod)
         },
         error: (err) => {
-          console.error(err)
+          const problem = err.error;
+          this.notificationService.notifie(
+            problem?.title || "Erreur de modification",
+            problem?.detail || "Impossible de modifier l'acteur."
+          );
         }
       })
     }

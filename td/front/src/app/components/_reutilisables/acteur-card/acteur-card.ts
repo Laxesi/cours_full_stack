@@ -1,9 +1,12 @@
 import {Component, HostListener, inject, input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Acteur} from '../../../models/acteur';
+import {DatePipe} from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [
+    DatePipe
+  ],
   selector: 'app-acteur-card',
   styleUrl: './acteur-card.css',
   templateUrl: './acteur-card.html',

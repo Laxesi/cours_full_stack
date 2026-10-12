@@ -1,4 +1,7 @@
+@if(estAncien(film())){
+  <a class="oldMovieMessage">Selection ancien film</a>
+}
 <h3>{{film().titre}}</h3>
 <a>par {{film().realisateur}}</a><br>
 <a>{{film().genre}}</a><br>
-<a>{{film().dateSortie}}</a>
+<a>{{film().dateSortie | date:"dd/MM/yyyy"}}</a>

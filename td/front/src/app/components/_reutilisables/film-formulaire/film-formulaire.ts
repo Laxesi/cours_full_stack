@@ -2,6 +2,7 @@ import {Component, inject, input, output} from '@angular/core';
 import {Film} from '../../../models/film';
 import {FormsModule} from '@angular/forms';
 import {FilmService} from '../../../services/film-service';
+import {NotificationService} from '../../../services/notification-service';
 
 @Component({
   imports: [FormsModule],
@@ -13,7 +14,8 @@ export class FilmFormulaire {
   filminput = input<Film | undefined>(undefined)
   nuewFilm = output<Film>();
 
-  private filmservice = inject(FilmService)
+  private filmservice = inject(FilmService);
+  private notificationService = inject(NotificationService);
 
   film: Partial<Film> = {
     id: 0,
@@ -39,7 +41,11 @@ export class FilmFormulaire {
           this.nuewFilm.emit(filmCree);
         },
         error: (err) => {
-          console.error(err)
+          const problem = err.error;
+          this.notificationService.notifie(
+            problem?.title || "Erreur de création",
+            problem?.detail || "Impossible d'enregistrer le film."
+          );
         }
       })
     }else {
@@ -53,7 +59,11 @@ export class FilmFormulaire {
           this.nuewFilm.emit(filmMod);
         },
         error: (err) => {
-          console.error(err)
+          const problem = err.error;
+          this.notificationService.notifie(
+            problem?.title || "Erreur de modification",
+            problem?.detail || "Impossible de modifiée le film."
+          );
         }
       })
     }

@@ -1,6 +1,6 @@
 @if (acteur$ | async; as acteur){
   <h1>{{acteur.nom}} {{acteur.prenom}}</h1>
-  <a>date de naissance : {{acteur.dateNaissance}}</a><br>
+  <a>date de naissance : {{acteur.dateNaissance | date:"dd/MM/yyyy"}}</a><br>
   <a>Film : </a><br>
   <app-film-make-list [films]="acteur.films"/>
   <button (click)="modifier = true">Modifier</button>

@@ -1,21 +1,23 @@
 import {Component, computed, inject, input} from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
-import {merge, Subject, switchMap} from 'rxjs';
+import {catchError, merge, of, Subject, switchMap} from 'rxjs';
 import {ActeurService} from '../../services/acteur-service';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
 import {Acteur} from '../../models/acteur';
 import {SuppressionConfirmation} from '../_reutilisables/suppression-confirmation/suppression-confirmation';
 import {ActeurFormulaire} from '../_reutilisables/acteur-formulaire/acteur-formulaire';
 import {FilmMakeList} from '../_reutilisables/film-make-list/film-make-list';
 import {Film} from '../../models/film';
+import {NotificationService} from '../../services/notification-service';
 
 @Component({
   imports: [
     AsyncPipe,
     SuppressionConfirmation,
     ActeurFormulaire,
-    FilmMakeList
+    FilmMakeList,
+    DatePipe
   ],
   selector: 'app-acteur-detail',
   styleUrl: './acteur-detail.css',
@@ -29,12 +31,22 @@ export class ActeurDetail {
   supprimer = false;
 
   private acteurService = inject(ActeurService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
 
   private acteurModifie$ = new Subject<Acteur>();
 
   acteurInitial$ = toObservable(this.acteurid).pipe(
-    switchMap(id => this.acteurService.getId(id))
+    switchMap(id => this.acteurService.getId(id).pipe(
+      catchError(err => {
+        const problem = err.error;
+        this.notificationService.notifie(
+          problem?.title || "Erreur de chargement",
+          problem?.detail || "Impossible de récupérée le détaille de l'acteur."
+        );
+        return of(null as unknown as Acteur);
+      })
+    ))
   );
 
   acteur$ = merge(this.acteurInitial$, this.acteurModifie$);
@@ -53,7 +65,11 @@ export class ActeurDetail {
           this.router.navigate(["/acteurs"]);
         },
         error: (err) => {
-          console.error(err);
+          const problem = err.error;
+          this.notificationService.notifie(
+            problem?.title || "Erreur de suppression",
+            problem?.detail || "Impossible de supprimer l'acteur."
+          );
         }
       })
     }

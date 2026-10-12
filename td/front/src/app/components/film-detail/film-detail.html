@@ -2,7 +2,7 @@
   <h1>{{film.titre}}</h1>
   <a>realisateur : {{film.realisateur}}</a><br>
   <a>genre : {{film.genre}}</a><br>
-  <a>date de sortie : {{film.dateSortie}}</a><br>
+  <a>date de sortie : {{film.dateSortie | date:"dd/MM/yyyy"}}</a><br>
   <a>acteurs : </a><br>
   <app-acteur-make-list [acteurs]="film.acteurs"/>
   <button (click)="modifier = true">Modifier</button>

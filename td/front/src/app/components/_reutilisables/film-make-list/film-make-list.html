@@ -1,3 +1,5 @@
 @for (f of films(); track f.id){
   <app-film-card [film]="f"></app-film-card>
+} @empty {
+  <a>Pas de film pour le moment.</a>
 }
