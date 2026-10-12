@@ -3,6 +3,17 @@
   <a>date de naissance : {{acteur.dateNaissance}}</a><br>
   <a>Film : </a><br>
   <app-film-make-list [films]="acteur.films"/>
+  <button (click)="modifier = true">Modifier</button>
+  <button (click)="supprimer = true">Supprimer</button>
+
+  @if (modifier){
+    <app-acteur-formulaire [acteurinput]="acteur" (nuewActeur)="acteurUpdate($event); this.modifier = false;"/>
+  }
+
+  @if (supprimer){
+    <app-suppression-confirmation (confirm)="suppression($event)"/>
+  }
+
 } @else {
   <h1>Une erreur est survenue</h1>
 }

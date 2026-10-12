@@ -1,0 +1,30 @@
+<h3>Gestion des acteurs du film</h3>
+@if (filmActeurs$ | async; as acteursFilm){
+  <input placeholder="rechercher un acteur ..." (input)="rechercher($event)">
+  @if (acteursFiltree$ | async; as acteurs){
+    @for(acteur of acteurs; track acteur.id){
+      <div class="acteurelement">
+        <a>{{acteur.nom}} {{acteur.prenom}}</a>
+        <button (click)="dissociee(acteur, acteursFilm)">Dissocée l'acteur</button>
+      </div>
+    } @empty {
+      <p>pas d'acteur a dissociée</p>
+    }
+  }
+    <hr>
+  @if (acteursDisponibles$ | async; as acteurs){
+    @for(acteur of acteurs; track acteur.id){
+      <div class="acteurelement">
+        <a>{{acteur.nom}} {{acteur.prenom}}</a>
+        <button (click)="associee(acteur, acteursFilm)">Associée l'acteur</button>
+      </div>
+    } @empty {
+      <p>pas d'acteur a assocée</p>
+    }
+  } @else {
+    <h1>Une erreur c'est produite</h1>
+  }
+}@else {
+  <h1>Une erreur c'est produite</h1>
+}
+<button class="close" (click)="close.emit()">Fermer</button>

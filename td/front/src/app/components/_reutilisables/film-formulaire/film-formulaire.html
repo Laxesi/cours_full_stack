@@ -1,0 +1,21 @@
+<h2>Formulaire de films</h2>
+<form (ngSubmit)="enregistrer()">
+  <a>Titre : </a>
+  <input name="titre" [(ngModel)]="film.titre"><br>
+  <a>Réalisateur :</a>
+  <input name="realisateur" [(ngModel)]="film.realisateur"><br>
+  <a>genre :</a>
+  <select name="genre" [(ngModel)]="film.genre">
+    <option value="ACTION">Action</option>
+    <option value="COMEDIE">Comedie</option>
+    <option value="HORREUR">Horreur</option>
+    <option value="THRILLER">Thriller</option>
+    <option value="FANTASTIQUE">Fantastique</option>
+    <option value="FAMILIAL">Familial</option>
+    <option value="DOCUMENTAIRE">Documentaire</option>
+    <option value="SCIENCE_FICTION">Science fiction</option>
+  </select><br>
+  <a>Date de sortie : </a>
+  <input name="dateSortie" [(ngModel)]="film.dateSortie" type="date"><br>
+  <button type="submit">Enregistrer</button>
+</form>

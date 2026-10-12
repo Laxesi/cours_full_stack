@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilmForm } from './film-form';
+import { SuppressionConfirmation } from './suppression-confirmation';
 
-describe('FilmForm', () => {
-  let component: FilmForm;
-  let fixture: ComponentFixture<FilmForm>;
+describe('SuppressionConfirmation', () => {
+  let component: SuppressionConfirmation;
+  let fixture: ComponentFixture<SuppressionConfirmation>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FilmForm],
+      imports: [SuppressionConfirmation],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FilmForm);
+    fixture = TestBed.createComponent(SuppressionConfirmation);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

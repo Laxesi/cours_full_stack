@@ -1,7 +1,7 @@
 import {inject, Service} from '@angular/core';
 import {Film} from '../models/film';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {Acteur} from '../models/acteur';
 
 @Service()
@@ -33,8 +33,8 @@ export class FilmService {
     return this.http.delete<void>(`${this.url}/${id}`)
   }
 
-  postActeur(idFilm: number, idActeur: number, acteur: Partial<Acteur>): Observable<Film>{
-    return this.http.post<Film>(`${this.url}/${idFilm}/acteurs/${idActeur}`, acteur)
+  postActeur(idFilm: number, idActeur: number): Observable<Film>{
+    return this.http.post<Film>(`${this.url}/${idFilm}/acteurs/${idActeur}`, EMPTY)
   }
 
   deleteActeur(idFilm: number, idActeur: number): Observable<void>{

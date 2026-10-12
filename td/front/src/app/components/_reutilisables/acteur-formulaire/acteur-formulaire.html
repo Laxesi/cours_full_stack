@@ -1,0 +1,10 @@
+<h2>Formulaire des acteurs</h2>
+<form (ngSubmit)="enregistrer()">
+  <a>nom : </a>
+  <input name="nom" [(ngModel)]="acteur.nom"><br>
+  <a>prenom : </a>
+  <input name="prenom" [(ngModel)]="acteur.prenom"><br>
+  <a>date de naissance : </a>
+  <input name="dateNaissance" type="date" [(ngModel)]="acteur.dateNaissance"><br>
+  <button type="submit">Enregistrer</button>
+</form>

@@ -1,6 +1,12 @@
 <h1>La liste des Acteurs</h1>
 @if (acteurs$ | async; as acteurs){
   <app-acteur-make-list [acteurs]="acteurs"/>
+  <button (click)="ajouter = true">Ajouter un acteur</button>
+
+  @if (ajouter){
+    <app-acteur-formulaire (nuewActeur)="acteursUpdated($event, acteurs)"/>
+  }
+
 } @else {
   <h1>Une erreur c'est produite</h1>
 }

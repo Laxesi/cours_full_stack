@@ -5,6 +5,22 @@
   <a>date de sortie : {{film.dateSortie}}</a><br>
   <a>acteurs : </a><br>
   <app-acteur-make-list [acteurs]="film.acteurs"/>
+  <button (click)="modifier = true">Modifier</button>
+  <button (click)="supprimer = true">Supprimer</button>
+  <button (click)="acteursEdit = true">Editer les acteurs</button>
+
+  @if (modifier){
+    <app-film-formulaire [filminput]="film" (nuewFilm)="filmUpdated($event); this.modifier = false;"/>
+  }
+
+  @if (supprimer){
+    <app-suppression-confirmation (confirm)="suppression($event)"/>
+  }
+
+  @if (acteursEdit){
+    <app-film-acteur-edit [film]="film" (close)="acteursEdit = false" (nuewFilm)="filmUpdated($event)"/>
+  }
+
 } @else {
   <h1>Une erreur est survenue</h1>
 }

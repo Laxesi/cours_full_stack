@@ -1,0 +1,42 @@
+:host{
+  display: block;
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.acteurelement{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-style: solid;
+  border-width: 0.5px;
+  border-radius: 100px;
+  padding-left: 10px;
+  margin-bottom: 5px;
+}
+
+input {
+  border-radius: 100px;
+  border-style: solid;
+  border-color: black;
+  border-width: 0.5px;
+  width: stretch;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.close{
+  margin-top: 10px;
+}
